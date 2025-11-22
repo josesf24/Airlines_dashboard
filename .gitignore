@@ -16,6 +16,7 @@ airports_filtered.csv
 
 # Ignore notebook experiments and colab artifacts
 *.ipynb
+Jose Collab
 Jose Collab/
 
 # Drop entire Basura folder
