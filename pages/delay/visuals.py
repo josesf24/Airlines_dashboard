@@ -1,17 +1,17 @@
-"""Conflict page visual components."""
+"""Delay Analysis visual components."""
 
 from __future__ import annotations
 
 from typing import List, Sequence, Tuple
 
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 
 def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
-    """Render the Conflict page visuals in Streamlit."""
+    """Render the Delay Analysis visuals in Streamlit."""
 
     st.plotly_chart(create_delay_map(df, airports_us), width="stretch")
     dep_fig, arr_fig, meta = create_delay_period_comparison(df)
@@ -28,7 +28,11 @@ def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
     )
 
 
-def create_delay_map(df: pd.DataFrame, airports_us: pd.DataFrame, marker_multiplier: int = 450) -> go.Figure:
+def create_delay_map(
+    df: pd.DataFrame,
+    airports_us: pd.DataFrame,
+    marker_multiplier: int = 450,
+) -> go.Figure:
     """Build a geospatial view comparing weather vs non-weather delays."""
 
     df = df.copy()
@@ -37,8 +41,9 @@ def create_delay_map(df: pd.DataFrame, airports_us: pd.DataFrame, marker_multipl
 
     df_weather = df[df["WEATHER_DELAY"] > 0].copy()
     stats_weather = (
-        df_weather.groupby("ORIGIN_AIRPORT")["WEATHER_DELAY"].agg(
-            ["sum", "mean", "median"]).reset_index()
+        df_weather.groupby("ORIGIN_AIRPORT")["WEATHER_DELAY"]
+        .agg(["sum", "mean", "median"])
+        .reset_index()
     )
     stats_weather.columns = ["ORIGIN_AIRPORT", "Total", "Avg", "Median"]
     map_weather = stats_weather.merge(
@@ -49,8 +54,9 @@ def create_delay_map(df: pd.DataFrame, airports_us: pd.DataFrame, marker_multipl
 
     df_other = df[(df["ARR_DELAY"] > 0) & (df["WEATHER_DELAY"] == 0)].copy()
     stats_other = (
-        df_other.groupby("ORIGIN_AIRPORT")["ARR_DELAY"].agg(
-            ["sum", "mean", "median"]).reset_index()
+        df_other.groupby("ORIGIN_AIRPORT")["ARR_DELAY"]
+        .agg(["sum", "mean", "median"])
+        .reset_index()
     )
     stats_other.columns = ["ORIGIN_AIRPORT", "Total", "Avg", "Median"]
     map_other = stats_other.merge(

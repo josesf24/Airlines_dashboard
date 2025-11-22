@@ -1,4 +1,4 @@
-"""Conflict page module."""
+"""Best Airline Suggester page module."""
 
 from .page import render_page
 

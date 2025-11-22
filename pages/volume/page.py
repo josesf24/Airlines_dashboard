@@ -1,4 +1,4 @@
-"""Conflict page layout and content."""
+"""Flight volume analysis page layout."""
 
 from __future__ import annotations
 
@@ -7,11 +7,12 @@ import streamlit as st
 
 from .visuals import render_visuals
 
-def render_page(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
-    """Render the Conflict page."""
 
-    st.subheader("Conflict")
+def render_page(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
+    """Render the Flight Volume Analysis page."""
+
+    st.subheader("Flight Volume Analysis")
     st.write(
-        "Highlight the operational issues, delays, and pain points discovered in the data."
+        "Explore how traffic fluctuates over time and which airports handle the heaviest loads."
     )
     render_visuals(df, airports_us)

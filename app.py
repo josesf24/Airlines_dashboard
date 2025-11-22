@@ -10,8 +10,9 @@ import streamlit as st
 
 from preprocess import load_preprocessed_data
 from pages.context import render_page as render_context_page
-from pages.conflict import render_page as render_conflict_page
-from pages.solution import render_page as render_solution_page
+from pages.volume import render_page as render_volume_page
+from pages.delay import render_page as render_delay_page
+from pages.best_airline import render_page as render_best_airline_page
 
 st.set_page_config(
     page_title="US Airline Operations",
@@ -28,9 +29,10 @@ def get_data(dataset_path: str | Path = "Airline_dataset.csv") -> Tuple[pd.DataF
 
 
 PAGES: Dict[str, Callable[[pd.DataFrame, pd.DataFrame], None]] = {
-    "Context": render_context_page,
-    "Conflict": render_conflict_page,
-    "Solution": render_solution_page,
+    "Understanding the Dataset": render_context_page,
+    "Flight Volume Analysis": render_volume_page,
+    "Delay Analysis": render_delay_page,
+    "Best Airline Suggester": render_best_airline_page,
 }
 
 

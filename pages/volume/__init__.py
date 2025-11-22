@@ -1,4 +1,4 @@
-"""Solution page module."""
+"""Flight volume analysis page module."""
 
 from .page import render_page
 

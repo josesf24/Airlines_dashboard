@@ -1,4 +1,4 @@
-"""Solution page visual components."""
+"""Best Airline Suggester visual components."""
 
 from __future__ import annotations
 
@@ -9,16 +9,20 @@ import streamlit as st
 
 
 def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
-    """Render solution-focused helpers such as the airline suggester."""
+    """Render interactive airline recommendations for a chosen route."""
 
-    st.subheader("Best Airline Suggester")
+    st.subheader("Route-specific performance ranking")
     if df.empty:
         st.info("No flight records available. Load data to unlock suggestions.")
         return
 
     origins = sorted(df["ORIGIN_AIRPORT"].dropna().unique())
     origin_choice = st.selectbox(
-        "Origin airport", origins, index=0, key="solution_origin")
+        "Origin airport",
+        origins,
+        index=0,
+        key="best_airline_origin",
+    )
     destinations = sorted(
         df.loc[df["ORIGIN_AIRPORT"] == origin_choice,
                "DEST_AIRPORT"].dropna().unique()
@@ -32,7 +36,7 @@ def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
         "Destination airport",
         destinations,
         index=0,
-        key="solution_destination",
+        key="best_airline_destination",
     )
 
     recommendations, sample_size, weeks_observed = _get_route_recommendations(
@@ -56,7 +60,8 @@ def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
 
     if recommendations.empty:
         st.info(
-            "Every airline on this route has very few flights in the selected period.")
+            "Every airline on this route has very few flights in the selected period."
+        )
         return
 
     total_weekly = recommendations['Flights / Week'].sum()
