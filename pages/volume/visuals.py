@@ -8,6 +8,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from theme import COLOR_SEQUENCE, PRIMARY_COLOR
+
 BLUE_GRADIENT = [
     "#001933",
     "#00264D",
@@ -65,7 +67,7 @@ def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
             x="Day",
             y="Flights",
             title="Flights by day of week",
-            color_discrete_sequence=["#FFA630"],
+            color_discrete_sequence=[PRIMARY_COLOR],
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -131,6 +133,7 @@ def _render_airline_period_chart(data: pd.DataFrame) -> None:
         st.info("Missing data for August 2018 or January 2020 airline comparison.")
         return
 
+    contrast_colors = [COLOR_SEQUENCE[0], COLOR_SEQUENCE[-1]]
     fig = px.bar(
         data,
         x="Airline_Name",
@@ -140,6 +143,7 @@ def _render_airline_period_chart(data: pd.DataFrame) -> None:
         title="Top airlines: Aug 2018 vs Jan 2020",
         labels={"Total_Flights": "Total flights"},
         category_orders={"Period": ["August 2018", "January 2020"]},
+        color_discrete_sequence=contrast_colors,
     )
     fig.update_layout(xaxis_title="Airline", yaxis_title="Total flights")
     st.plotly_chart(fig, use_container_width=True)
@@ -181,11 +185,9 @@ def _render_busiest_airports(df: pd.DataFrame, airports_us: pd.DataFrame) -> Non
         orientation="h",
         text="Flights",
         title="Top 10 origin airports by flights",
-        color="Flights",
-        color_continuous_scale="Viridis",
+        color_discrete_sequence=[PRIMARY_COLOR],
     )
-    fig.update_layout(yaxis=dict(autorange="reversed"),
-                      coloraxis_showscale=False)
+    fig.update_layout(yaxis=dict(autorange="reversed"))
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -214,11 +216,9 @@ def _render_airline_snapshot(df: pd.DataFrame) -> None:
         orientation="h",
         text="Flights",
         title="Top airlines by flight count",
-        color="Flights",
-        color_continuous_scale="Blues",
+        color_discrete_sequence=[PRIMARY_COLOR],
     )
-    fig.update_layout(yaxis=dict(autorange="reversed"),
-                      coloraxis_showscale=False)
+    fig.update_layout(yaxis=dict(autorange="reversed"))
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -265,6 +265,7 @@ def _render_state_period_chart(data: pd.DataFrame) -> None:
         st.info("Missing data for August 2018 or January 2020 state comparison.")
         return
 
+    contrast_colors = [COLOR_SEQUENCE[0], COLOR_SEQUENCE[-1]]
     fig = px.bar(
         data,
         x="State",
@@ -274,6 +275,7 @@ def _render_state_period_chart(data: pd.DataFrame) -> None:
         title="Top states: Aug 2018 vs Jan 2020",
         labels={"Total_Flights": "Total flights"},
         category_orders={"Period": ["August 2018", "January 2020"]},
+        color_discrete_sequence=contrast_colors,
     )
     fig.update_layout(xaxis_title="State", yaxis_title="Total flights")
     st.plotly_chart(fig, use_container_width=True)

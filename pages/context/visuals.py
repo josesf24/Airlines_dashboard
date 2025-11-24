@@ -6,6 +6,13 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+try:
+    from theme import ACCENT_GREEN, ACCENT_ORANGE, PRIMARY_COLOR
+except ModuleNotFoundError:  # Standalone execution fallback
+    PRIMARY_COLOR = "#60A5FA"
+    ACCENT_GREEN = "#34D399"
+    ACCENT_ORANGE = "#F97316"
+
 
 def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
     """Show overview cards and a quick look at airline coverage."""
@@ -33,8 +40,10 @@ def render_visuals(df: pd.DataFrame, airports_us: pd.DataFrame) -> None:
     if waterfall_data is None:
         st.info("Need August 2018 and January 2020 data to compute performance totals.")
     else:
-        st.plotly_chart(_render_performance_waterfall(
-            *waterfall_data), use_container_width=True)
+        st.plotly_chart(
+            _render_performance_waterfall(*waterfall_data),
+            use_container_width=True,
+        )
 
     st.caption("Metrics reflect the currently loaded dataset slice.")
 
@@ -87,8 +96,12 @@ def _calculate_period_metrics(data_df: pd.DataFrame, period_name: str) -> pd.Dat
     )
 
 
-def _render_performance_waterfall(x: list[str], y: list[int], measures: list[str]) -> go.Figure:
-    """Create the performance waterfall figure."""
+def _render_performance_waterfall(
+    x: list[str],
+    y: list[int],
+    measures: list[str],
+) -> go.Figure:
+    """Create the performance waterfall figure using the original layout."""
 
     fig = go.Figure(
         go.Waterfall(
@@ -98,15 +111,15 @@ def _render_performance_waterfall(x: list[str], y: list[int], measures: list[str
             x=x,
             y=y,
             connector={"line": {"color": "rgb(63, 63, 63)"}},
-            increasing={"marker": {"color": "green"}},
-            decreasing={"marker": {"color": "red"}},
-            totals={"marker": {"color": "blue"}},
+            increasing={"marker": {"color": ACCENT_GREEN}},
+            decreasing={"marker": {"color": ACCENT_ORANGE}},
+            totals={"marker": {"color": PRIMARY_COLOR}},
         )
     )
     fig.update_layout(
-        title="Overall Flight Performance (Aug 2018 + Jan 2020)",
+        title_text="Overall Flight Performance (August 2018 & January 2020 Combined)",
         xaxis_title="Category",
-        yaxis_title="Number of flights",
+        yaxis_title="Number of Flights",
         showlegend=False,
     )
     return fig
